@@ -31,4 +31,5 @@ The dataset used in this project is the Rossmann Store Sales data from Kaggle:
 https://www.kaggle.com/competitions/rossmann-store-sales
 
 ## Plots
+![mlflow](https://github.com/juste97/darts-forecasting-pipeline/blob/main/data/plots/mlflow.png?raw=true)
 ![Forecast: Store 1](https://github.com/juste97/darts-pipeline/blob/main/data/plots/prob_forecast_store_1.png?raw=true)
