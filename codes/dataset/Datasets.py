@@ -31,7 +31,6 @@ class Datasets:
         Returns:
         - pd.DataFrame: The data read from the file.
         """
-        # Infer file type from the path extension
         file_type = self.path.split(".")[-1]
 
         if file_type == "xlsx":
