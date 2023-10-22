@@ -4,9 +4,9 @@
 [![black](https://img.shields.io/badge/Code%20Style-Black-black.svg?labelColor=gray)](https://black.readthedocs.io/en/stable/)
 
 
-# WORK IN PROGRESS - Pipeline for Forecasting with Darts
+# ❗ WORK IN PROGRESS ❗- Pipeline for Forecasting with Darts 📈
 
-## Overview
+## Overview 👀
 
 This repository contains code for (probabilistic) forecasting experiments using the Rossmann sales dataset with the Python library Darts in combination with Hydra, Optuna optimizer and MLFlow.
 
@@ -26,9 +26,10 @@ This repository contains code for (probabilistic) forecasting experiments using 
 
 MLflow is a platform to streamline machine learning development, including tracking experiments, packaging code into reproducible runs, and sharing and deploying models. MLflow offers a set of lightweight APIs that can be used with any existing machine learning application or library (TensorFlow, PyTorch, XGBoost, etc), wherever you currently run ML code (e.g. in notebooks, standalone applications or the cloud).
 
-## Dataset
+## Dataset 💾
 The dataset used in this project is the Rossmann Store Sales data from Kaggle:
 https://www.kaggle.com/competitions/rossmann-store-sales
 
-## Plots
+## Plots 🖼
+![mlflow](https://github.com/juste97/darts-forecasting-pipeline/blob/main/data/plots/mlflow.png?raw=true)
 ![Forecast: Store 1](https://github.com/juste97/darts-pipeline/blob/main/data/plots/prob_forecast_store_1.png?raw=true)
