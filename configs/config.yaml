@@ -1,0 +1,33 @@
+defaults:
+  - _self_
+  - datasets: dataset
+  - models: BlockRNN
+  - search_spaces@hydra.sweeper.params: ${models}
+  - override hydra/sweeper: optuna
+  - override hydra/sweeper/sampler: tpe
+
+experiment_name: RossmannSales
+forecast_horizon: 36
+global_model: True
+parameter: "SMAPE"
+
+mlflow:
+  tracking_uri: "C:/Users/steng/Github/darts-forecasting-pipeline/outputs/mlruns"
+
+hydra:
+  job:
+    chdir: True
+  run:
+    dir: "C:/Users/steng/Github/darts-forecasting-pipeline/outputs/${now:%Y_%m_%d_%H_%M_%S}"
+  sweep:
+    dir: "C:/Users/steng/Github/darts-forecasting-pipeline/outputs/sweep/${experiment_name}/${now:%Y_%m_%d_%H_%M_%S}"
+  sweeper:
+    sampler:
+      _target_: optuna.samplers.TPESampler
+      seed: 42
+    _target_: hydra_plugins.hydra_optuna_sweeper.optuna_sweeper.OptunaSweeper
+    direction: minimize
+    study_name: main
+    storage: null
+    n_trials: 100
+    n_jobs: 1

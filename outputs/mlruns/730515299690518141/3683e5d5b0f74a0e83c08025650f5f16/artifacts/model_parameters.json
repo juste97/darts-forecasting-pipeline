@@ -1,0 +1,13 @@
+{
+  "input_chunk_length": 30,
+  "output_chunk_length": 14,
+  "model": "RNN",
+  "hidden_dim": 50,
+  "n_rnn_layers": 2,
+  "batch_size": 30,
+  "n_epochs": 20,
+  "dropout": 0.0,
+  "force_reset": true,
+  "save_checkpoints": false,
+  "random_state": 42
+}

@@ -1,0 +1,26 @@
+[2023-10-22 16:55:02,646][darts.models.forecasting.torch_forecasting_model][INFO] - Train dataset contains 7596 samples.
+[2023-10-22 16:55:02,648][darts.models.forecasting.torch_forecasting_model][INFO] - Time series values are 64-bits; casting model to float64.
+[2023-10-22 16:55:02,680][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2023-10-22 16:55:02,680][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2023-10-22 16:55:02,681][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2023-10-22 16:55:02,681][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+[2023-10-22 16:55:02,684][pytorch_lightning.accelerators.cuda][INFO] - LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+[2023-10-22 16:55:02,686][pytorch_lightning.callbacks.model_summary][INFO] - 
+  | Name          | Type             | Params
+---------------------------------------------------
+0 | criterion     | MSELoss          | 0     
+1 | train_metrics | MetricCollection | 0     
+2 | val_metrics   | MetricCollection | 0     
+3 | rnn           | RNN              | 14.2 K
+4 | fc            | Sequential       | 630   
+---------------------------------------------------
+14.8 K    Trainable params
+0         Non-trainable params
+14.8 K    Total params
+0.059     Total estimated model params size (MB)
+[2023-10-22 16:56:19,076][pytorch_lightning.utilities.rank_zero][INFO] - `Trainer.fit` stopped: `max_epochs=20` reached.
+[2023-10-22 16:56:19,121][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2023-10-22 16:56:19,121][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2023-10-22 16:56:19,122][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2023-10-22 16:56:19,123][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+[2023-10-22 16:56:19,127][pytorch_lightning.accelerators.cuda][INFO] - LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]

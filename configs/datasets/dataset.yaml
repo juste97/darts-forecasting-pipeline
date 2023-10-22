@@ -1,0 +1,8 @@
+dataset:
+  _target_: codes.dataset.Datasets.Datasets
+  path: "C://Users//steng//Github//darts-forecasting-pipeline//data//processed//rossmann.parquet"
+  time_col: "Date"
+  freq: "D"
+  group_cols: "Store"
+  value_col: "Sales"
+  split_key: 36

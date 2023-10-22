@@ -1,0 +1,6 @@
+- models.model.input_chunk_length=65
+- models.model.output_chunk_length=18
+- models.model.n_rnn_layers=1
+- models.model.hidden_dim=49
+- models.model.dropout=0.17500000000000002
+- models.model.model=RNN

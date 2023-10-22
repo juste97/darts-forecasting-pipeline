@@ -1,0 +1,29 @@
+experiment_name: RossmannSales
+forecast_horizon: 36
+global_model: true
+parameter: SMAPE
+mlflow:
+  tracking_uri: C:/Users/steng/Github/darts-forecasting-pipeline/outputs/mlruns
+datasets:
+  dataset:
+    _target_: codes.dataset.Datasets.Datasets
+    path: C://Users//steng//Github//darts-forecasting-pipeline//data//processed//rossmann.parquet
+    time_col: Date
+    freq: D
+    group_cols: Store
+    value_col: Sales
+    split_key: 36
+models:
+  model:
+    _target_: darts.models.forecasting.block_rnn_model.BlockRNNModel
+    input_chunk_length: 15
+    output_chunk_length: 20
+    model: LSTM
+    hidden_dim: 43
+    n_rnn_layers: 7
+    batch_size: 30
+    n_epochs: 20
+    dropout: 0.05
+    force_reset: true
+    save_checkpoints: false
+    random_state: 42

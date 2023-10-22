@@ -1,0 +1,15 @@
+artifact_uri: file:C:/Users/steng/Github/darts-forecasting-pipeline/outputs/mlruns/730515299690518141/c29a786bc1d940498acd0e211299efae/artifacts
+end_time: 1697985381982
+entry_point_name: ''
+experiment_id: '730515299690518141'
+lifecycle_stage: active
+run_id: c29a786bc1d940498acd0e211299efae
+run_name: BlockRNNModel_2023_10_22_16_32_15
+run_uuid: c29a786bc1d940498acd0e211299efae
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1697985135797
+status: 3
+tags: []
+user_id: steng

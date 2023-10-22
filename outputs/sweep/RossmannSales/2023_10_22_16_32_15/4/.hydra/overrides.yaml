@@ -1,0 +1,6 @@
+- models.model.input_chunk_length=15
+- models.model.output_chunk_length=20
+- models.model.n_rnn_layers=7
+- models.model.hidden_dim=43
+- models.model.dropout=0.05
+- models.model.model=LSTM

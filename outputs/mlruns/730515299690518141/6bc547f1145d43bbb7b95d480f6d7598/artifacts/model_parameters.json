@@ -1,0 +1,13 @@
+{
+  "input_chunk_length": 50,
+  "output_chunk_length": 18,
+  "model": "LSTM",
+  "hidden_dim": 31,
+  "n_rnn_layers": 2,
+  "batch_size": 30,
+  "n_epochs": 20,
+  "dropout": 0.125,
+  "force_reset": true,
+  "save_checkpoints": false,
+  "random_state": 42
+}

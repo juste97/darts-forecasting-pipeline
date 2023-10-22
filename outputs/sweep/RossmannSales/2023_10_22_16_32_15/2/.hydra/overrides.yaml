@@ -1,0 +1,6 @@
+- models.model.input_chunk_length=35
+- models.model.output_chunk_length=16
+- models.model.n_rnn_layers=4
+- models.model.hidden_dim=21
+- models.model.dropout=0.125
+- models.model.model=GRU

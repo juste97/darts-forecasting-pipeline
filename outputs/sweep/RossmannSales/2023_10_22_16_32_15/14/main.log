@@ -1,0 +1,20 @@
+[2023-10-22 16:57:49,955][darts.models.forecasting.torch_forecasting_model][INFO] - Train dataset contains 7551 samples.
+[2023-10-22 16:57:49,957][darts.models.forecasting.torch_forecasting_model][INFO] - Time series values are 64-bits; casting model to float64.
+[2023-10-22 16:57:49,994][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2023-10-22 16:57:49,995][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2023-10-22 16:57:49,996][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2023-10-22 16:57:49,996][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+[2023-10-22 16:57:49,999][pytorch_lightning.accelerators.cuda][INFO] - LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+[2023-10-22 16:57:50,001][pytorch_lightning.callbacks.model_summary][INFO] - 
+  | Name          | Type             | Params
+---------------------------------------------------
+0 | criterion     | MSELoss          | 0     
+1 | train_metrics | MetricCollection | 0     
+2 | val_metrics   | MetricCollection | 0     
+3 | rnn           | RNN              | 11.0 K
+4 | fc            | Sequential       | 658   
+---------------------------------------------------
+11.7 K    Trainable params
+0         Non-trainable params
+11.7 K    Total params
+0.047     Total estimated model params size (MB)

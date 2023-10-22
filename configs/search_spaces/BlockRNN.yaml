@@ -1,0 +1,6 @@
+models.model.input_chunk_length: int(range(10, 100, 5))
+models.model.output_chunk_length: int(range(10, 20, 2))
+models.model.n_rnn_layers: int(range(1, 7, 1))
+models.model.hidden_dim: int(range(10, 50, 1))
+models.model.dropout: float(range(0.0, 0.2, 0.025))
+models.model.model: choice("RNN", "LSTM", "GRU")

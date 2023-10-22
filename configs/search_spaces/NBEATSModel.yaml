@@ -1,0 +1,5 @@
+models.model.input_chunk_length: int(range(10, 50, 5))
+models.model.output_chunk_length: int(range(10, 20, 2))
+models.model.num_stacks: int(range(20, 50, 5))
+models.model.num_layers: int(range(1, 6, 1))
+models.model.dropout: float(range(0.0, 0.4, 0.005))
