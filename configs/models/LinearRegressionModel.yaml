@@ -1,0 +1,7 @@
+model:
+  _target_: darts.models.forecasting.linear_regression_model.LinearRegressionModel
+  lags: 5
+  lags_past_covariates: 5
+  output_chunk_length: 10
+  multi_models: True
+  use_static_covariates: True
