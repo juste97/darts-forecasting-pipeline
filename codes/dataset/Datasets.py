@@ -7,127 +7,131 @@ import pyarrow
 import pandas as pd
 
 
-class Datasets:
+class TimeSeriesDataLoader:
+    """
+    Handles loading, splitting, and preparing time series data for forecasting with Darts.
+    """
+
     def __init__(
         self,
-        split_key: int,
-        path: str,
-        freq: str,
-        group_cols: str,
-        time_col: str,
-        value_col: str,
-    ) -> None:
-        self.split_key = split_key
+        path,
+        time_col,
+        group_cols,
+        value_col,
+        features,
+        frequency,
+        train_ratio=0.6,
+        test_ratio=0.2,
+        validation_ratio=0.2,
+    ):
+        """
+        Initializes the TimeSeriesDataLoader with data source and parameters for processing.
+
+        Args:
+            path (str): Path to the dataset file.
+            time_col (str): Name of the column containing time data (needs to be in pd.DateTime).
+            group_cols (str or list): Column name(s) defining groups in the dataset.
+            value_col (str): Name of the target variable column.
+            features (list): List of feature column names.
+            frequency (str): Frequency of the time series data.
+            train_ratio (float, optional): Proportion of data to be used for training. Defaults to 0.6.
+            test_ratio (float, optional): Proportion of data for testing. Defaults to 0.2.
+            validation_ratio (float, optional): Proportion of data for validation. Defaults to 0.2.
+        """
         self.path = path
-        self.freq = freq
         self.time_col = time_col
-        self.group_cols = [group_cols]
+        self.group_cols = group_cols
         self.value_col = value_col
+        self.features = features
+        self.frequency = frequency
+        self.train_ratio = train_ratio
+        self.test_ratio = test_ratio
+        self.validation_ratio = validation_ratio
 
-    def read_data_from_path(self):
+    def load_data(self):
         """
-        Reads data from the specified path. Infers the file type from the path extension.
-
-        Returns:
-        - pd.DataFrame: The data read from the file.
+        Loads the dataset from the specified path and converts the time column to datetime format.
         """
-        file_type = self.path.split(".")[-1]
+        self.dataset = pd.read_parquet(self.path)
+        self.dataset[self.time_col] = pd.to_datetime(self.dataset[self.time_col])
 
-        if file_type == "xlsx":
-            dataframe = pd.read_excel(self.path)
-        elif file_type == "csv":
-            dataframe = pd.read_csv(self.path)
-        elif file_type == "parquet":
-            dataframe = pd.read_parquet(self.path)
-        else:
-            raise ValueError(f"Unsupported file type: {file_type}")
-
-        return dataframe
-
-    def extract_features_from_dataframe(self, dataframe):
+    def split_data(self):
         """
-        Extracts feature columns from the dataframe.
-
-        Returns:
-        - list: List of feature column names.
+        Splits the dataset into training, validation, and test sets based on specified ratios.
+        It calculates the split dates based on the total duration of the dataset and creates TimeSeries objects for the target and covariate data.
         """
-        exclude_cols = [self.time_col, self.value_col] + self.group_cols
-        feature_cols = [col for col in dataframe.columns if col not in exclude_cols]
-        return feature_cols
+        total_days = (
+            self.dataset[self.time_col].max() - self.dataset[self.time_col].min()
+        ).days
+        train_end = self.dataset[self.time_col].min() + pd.to_timedelta(
+            int(total_days * self.train_ratio), unit="d"
+        )
+        val_start = train_end - pd.to_timedelta(1, unit="d")
+        val_end = val_start + pd.to_timedelta(
+            int(total_days * self.validation_ratio), unit="d"
+        )
+        test_start = val_end - pd.to_timedelta(1, unit="d")
 
-    def create_time_series(self, dataframe, features):
-        """
-        Creates a TimeSeries object for the target column and another for the features (covariates).
-
-        Parameters:
-        - dataframe (pd.DataFrame): The input dataframe containing the data.
-        - features (list): List of feature column names.
-
-        Returns:
-        - tuple: A tuple containing two TimeSeries objects: (y, covariates).
-        """
-        y = TimeSeries.from_group_dataframe(
-            dataframe,
+        target = TimeSeries.from_group_dataframe(
+            self.dataset,
             time_col=self.time_col,
-            group_cols=self.group_cols,
-            value_cols=self.value_col,
-            freq=self.freq,
+            group_cols=[self.group_cols],
+            value_cols=[self.value_col],
+            freq=self.frequency,
         )
 
-        covariates = TimeSeries.from_group_dataframe(
-            dataframe,
+        self.covariates = TimeSeries.from_group_dataframe(
+            self.dataset,
             time_col=self.time_col,
-            group_cols=self.group_cols,
-            value_cols=features,
-            freq=self.freq,
+            group_cols=[self.group_cols],
+            value_cols=self.features,
+            freq=self.frequency,
         )
 
-        return y, covariates
+        self.train_series = [series.drop_after(train_end) for series in target]
+        self.validation_series = [
+            series.drop_before(val_start).drop_after(val_end) for series in target
+        ]
+        self.test_series = [series.drop_before(test_start) for series in target]
 
-    def train_test_split(self, y, covariates):
+    def scale_data(self):
         """
-        Splits the time series into training and test sets, and scales them.
+        Scales the train, validation, and test series using the Max Absolute Scaler.
+        Applies scaling separately to the target series and covariates, fitting the scaler on the training data.
+        """
+        self.target_scaler = Scaler(scaler=MaxAbsScaler(), global_fit=False).fit(
+            self.train_series
+        )
+        self.train_series_scaled = self.target_scaler.transform(self.train_series)
+        self.validation_series_scaled = self.target_scaler.transform(
+            self.validation_series
+        )
+        self.test_series_scaled = self.target_scaler.transform(self.test_series)
 
-        Parameters:
-        - y (TimeSeries): TimeSeries object for the target column.
-        - covariates (TimeSeries): TimeSeries object for the features.
+        self.covariates_scaler = Scaler(scaler=MaxAbsScaler(), global_fit=False).fit(
+            [
+                series.drop_after(self.train_series[0].time_index.max())
+                for series in self.covariates
+            ]
+        )
+        self.covariates_scaled = self.covariates_scaler.transform(self.covariates)
+
+    def get_data(self) -> tuple:
+        """
+        Starts the loading, splitting, and scaling of the dataset.
 
         Returns:
-        - tuple: A tuple containing the original time series, scaler for y, scaled training and test sets,
-                and scaled covariates.
+            tuple: Contains scaled training, validation, and test series, along with the scalers for target and covariates.
         """
-        y_train_list = [ts[: -self.split_key] for ts in y]
-        y_test_list = [ts[-self.split_key :] for ts in y]
+        self.load_data()
+        self.split_data()
+        self.scale_data()
 
-        y_scaler = Scaler(scaler=MaxAbsScaler(), global_fit=True)
-        covariates_scaler = Scaler(scaler=MaxAbsScaler(), global_fit=True)
-
-        train = y_scaler.fit_transform(y_train_list)
-        test = y_scaler.transform(y_test_list)
-
-        covariates = covariates_scaler.fit_transform(covariates)
-
-        return y, y_scaler, train, test, covariates
-
-    def return_dataset(self):
-        """
-        Reads data, extracts features, creates time series, splits the data into train and test sets,
-        and scales them.
-
-        Returns:
-        - tuple: A tuple containing the original time series, scaler for y, scaled training and test sets,
-                and scaled covariates.
-        """
-
-        print(
-            "Reading data, extracting features, creating time series, applying train test split."
+        return (
+            self.train_series_scaled,
+            self.validation_series_scaled,
+            self.test_series_scaled,
+            self.covariates_scaled,
+            self.target_scaler,
+            self.covariates_scaler,
         )
-
-        dataframe = self.read_data_from_path()
-        feature_cols = self.extract_features_from_dataframe(dataframe)
-        y, covariates = self.create_time_series(
-            dataframe=dataframe, features=feature_cols
-        )
-        y, y_scaler, train, test, covariates = self.train_test_split(y, covariates)
-
-        return y, y_scaler, train, test, covariates
