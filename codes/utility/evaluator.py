@@ -161,7 +161,7 @@ class Evaluator:
         self.aggregated_metrics["Mean Absolute Error"] = mae(
             self.target_series, self.predictions, intersect=True
         )
-        # self.aggregated_metrics['Mean Absolute Percentage Error'] = mape(self.target_series, self.predictions, intersect=True) # Commented out in your code
+        # self.aggregated_metrics['Mean Absolute Percentage Error'] = mape(self.target_series, self.predictions, intersect=True)
         self.aggregated_metrics["Mean Absolute Ranged Relative Error"] = marre(
             self.target_series, self.predictions, intersect=True
         )
