@@ -237,9 +237,9 @@ class Evaluator:
 
         return metric
 
-    def plot_predictions(self, name: str = "", reduction_factor: int = None):
+    def plot_forecasts(self, name: str = "", reduction_factor: int = None):
         """
-        Plots the training, validation or test series along with the forecasted predictions.
+        Plots the training, validation or test series along with the forecasts.
         This method generates a plot for each entity in the predictions list.
 
         Args:
